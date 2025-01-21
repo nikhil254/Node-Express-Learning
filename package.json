@@ -1,0 +1,38 @@
+{
+  "name": "node-express-learning",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "generate-module": "ts-node src/cli/generate-module-file.ts generate",
+    "dev": "nodemon --exec ts-node index.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "pg": "^8.13.1",
+    "sequelize": "^6.37.5",
+    "winston": "^3.17.0"
+  },
+  "devDependencies": {
+    "@types/commander": "^2.12.5",
+    "@types/cors": "^2.8.17",
+    "@types/dotenv": "^8.2.3",
+    "@types/express": "^5.0.0",
+    "@types/fs-extra": "^11.0.4",
+    "@types/helmet": "^4.0.0",
+    "@types/pg": "^8.11.10",
+    "@types/sequelize": "^4.28.20",
+    "commander": "^13.1.0",
+    "fs-extra": "^11.3.0",
+    "nodemon": "^3.1.9",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.3"
+  }
+}
