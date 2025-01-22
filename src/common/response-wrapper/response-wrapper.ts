@@ -10,6 +10,7 @@ export class ResponseWrapper {
   reqMethod: string;
   pathUrl: string;
   timeStamp: string;
+  yy: string;
 
   constructor({ data, error, message, statusCode }: ResponseData) {
     const store = asyncLocalStorage.getStore() || new Map<string, any>();
@@ -22,6 +23,7 @@ export class ResponseWrapper {
     this.reqMethod = store.get('reqMethod') || 'UNKNOWN';
     this.pathUrl = store.get('pathUrl') || 'UNKNOWN';
     this.timeStamp = store.get('timeStamp') || new Date().toISOString();
+    this.yy = store.get('requestId') || 'UNKNOWN';
   }
 
   // Serialize the response object for JSON output
@@ -34,6 +36,7 @@ export class ResponseWrapper {
       reqMethod: this.reqMethod,
       pathUrl: this.pathUrl,
       timeStamp: this.timeStamp,
+      yy: this.yy
     };
   }
 }

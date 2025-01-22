@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { ResponseWrapper } from '../../common/response-wrapper/response-wrapper.middleware';
+import { ResponseWrapper } from '../../common/response-wrapper/response-wrapper';
 
 export const healthCheck = (req: Request, res: Response) => {
   const healthData = {
