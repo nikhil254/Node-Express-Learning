@@ -17,8 +17,8 @@ export const loadRoutes = async (app: Express): Promise<void> => {
 
     if (fs.existsSync(routePath)) {
       try {
-        const routeModule = await import(routePath);
-        app.use(`/api/${serviceDir}`, routeModule.default);
+        const routeModule = await import(routePath);        
+        app.use(`/api`, routeModule.default);
       } catch (error) {
         console.error(`Failed to load routes for ${serviceDir}:`, error);
       }

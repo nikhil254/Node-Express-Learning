@@ -4,6 +4,7 @@ import helmet from "helmet";
 import dotenv from "dotenv";
 import { loadRoutes } from "./utils/route-loader";
 import { errorHandler } from "./middlewares/error-handler/error-handler.middleware";
+import { requestContextMiddleware } from "./middlewares/request-response/request-context.middleware";
 
 // Function to start the server
 export const startServer = async (): Promise<void> => {
@@ -18,6 +19,7 @@ export const startServer = async (): Promise<void> => {
   app.use(express.urlencoded({ extended: true })); // Parse URL-encoded requests
   app.use(helmet()); // Add security headers to the response
   app.use(cors()); // Enable Cross-Origin Resource Sharing
+  app.use(requestContextMiddleware);
 
   // Use the loadVersionedRoutes function to register versioned routes
   try {
