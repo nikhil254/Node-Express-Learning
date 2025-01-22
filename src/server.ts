@@ -3,6 +3,7 @@ import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
 import { loadRoutes } from "./utils/route-loader";
+import { errorHandler } from "./middlewares/error-handler/error-handler.middleware";
 
 // Function to start the server
 export const startServer = async (): Promise<void> => {
@@ -27,6 +28,9 @@ export const startServer = async (): Promise<void> => {
     console.error(error.message);
     return;
   }
+
+  // Global error handler
+  app.use(errorHandler);
 
   // Start the server
   const SERVER_PORT = process.env.SERVER_PORT || 4000;

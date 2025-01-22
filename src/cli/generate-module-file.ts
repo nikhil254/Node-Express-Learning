@@ -5,54 +5,50 @@ import { Command } from 'commander';
 // Initialize the commander program
 const program = new Command();
 
+function capitalize(str: string): string {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
 // Function to generate the module
-function generateModule(name: string): void {
-  const rootPath = process.cwd();  // Get the current working directory, which should be the project root
-  const srcPath = path.join(rootPath, 'src');  // Path to the existing src folder
+function generateModule(name: string, empty: boolean = false): void {
+  const rootPath = process.cwd();
+  const srcPath = path.join(rootPath, 'src');
   const servicesPath = path.join(srcPath, 'services');
   const modulePath = path.join(servicesPath, name);
 
-  // Check if the 'services' directory exists
   if (!fs.existsSync(servicesPath)) {
-    console.log(`'services' directory does not exist. Creating 'services' directory.`);
+    console.log(`'services' directory does not exist. Creating...`);
     fs.ensureDirSync(servicesPath);
   }
 
-  // If the module (service) already exists
   if (fs.existsSync(modulePath)) {
-    console.log(`Service module "${name}" already exists!`);
+    console.log(`Error: Service module "${name}" already exists!`);
     return;
   }
 
-  // Create the module directory
   fs.ensureDirSync(modulePath);
 
-  // Define file paths for controller, route, and service
-  const routePath = path.join(modulePath, `${name}.routes.ts`);
-  const controllerPath = path.join(modulePath, `${name}.controller.ts`);
-  const servicePath = path.join(modulePath, `${name}.services.ts`);
-  const repositoryPath = path.join(modulePath, `${name}.repository.ts`);
-  const modelPath = path.join(modulePath, `${name}.model.ts`);
-  const constantsPath = path.join(modulePath, `${name}.constants.ts`);
-  const typePath = path.join(modulePath, `${name}.types.ts`);
-  const validatorPath = path.join(modulePath, `${name}.validator.ts`);
-  const errorPath = path.join(modulePath, `${name}.error.ts`);
+  const files = [
+    { path: `${name}.routes.ts`, content: ''},
+    { path: `${name}.controller.ts`, content: ''},
+    { path: `${name}.services.ts`, content: ''},
+    { path: `${name}.repository.ts`, content: ''},
+    { path: `${name}.model.ts`, content: ''},
+    { path: `${name}.constants.ts`, content: ''},
+    { path: `${name}.types.ts`, content: ''},
+    { path: `${name}.validator.ts`, content: ''},
+    { path: `${name}.error.ts`, content: ''},
+  ];
 
-  // Create empty files
-  fs.writeFileSync(controllerPath, '');
-  fs.writeFileSync(routePath, '');
-  fs.writeFileSync(servicePath, '');
-  fs.writeFileSync(repositoryPath, '');
-  fs.writeFileSync(modelPath, '');
-  fs.writeFileSync(constantsPath, '');
-  fs.writeFileSync(typePath, '');
-  fs.writeFileSync(validatorPath, '');
-  fs.writeFileSync(errorPath, '');
+  files.forEach(({ path: filePath, content }) => {
+    const fullPath = path.join(modulePath, filePath);
+    fs.writeFileSync(fullPath, empty ? '' : content);
+  });
 
-  console.log(`Module "${name}" generated successfully with empty files!`);
+  console.log(`Module "${name}" has been generated successfully!`);
 }
 
-// Define CLI command for generating modules
+// Define CLI command
 program
   .command('generate <name>')
   .description('Generate a new module (controller, route, service) with empty files')
@@ -60,5 +56,4 @@ program
     generateModule(name);
   });
 
-// Parse command-line arguments
 program.parse(process.argv);
