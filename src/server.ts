@@ -3,8 +3,8 @@ import cors from "cors";
 import helmet from "helmet";
 import dotenv from "dotenv";
 import { loadRoutes } from "./utils/route-loader";
-import { errorHandler } from "./middlewares/error-handler/error-handler.middleware";
-import { requestContextMiddleware } from "./middlewares/request-response/request-context.middleware";
+import { errorHandler } from "./middlewares/error-handler.middleware";
+import { requestContextMiddleware } from "./middlewares/request-context.middleware";
 
 // Function to start the server
 export const startServer = async (): Promise<void> => {

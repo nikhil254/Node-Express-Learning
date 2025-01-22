@@ -1,4 +1,4 @@
-import { asyncLocalStorage } from '../../utils/asyncStorage';
+import { asyncLocalStorage } from '../utils/asyncStorage';
 import { Request, Response, NextFunction } from 'express';
 import { v4 as uuidv4 } from 'uuid';
 
