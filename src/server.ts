@@ -1,13 +1,12 @@
-import express from 'express';
-import cors from 'cors';
-import helmet from 'helmet';
-import dotenv from 'dotenv';
-import { loadRoutes } from './utils/route-loader';
+import express from "express";
+import cors from "cors";
+import helmet from "helmet";
+import dotenv from "dotenv";
+import { loadRoutes } from "./utils/route-loader";
 
 // Function to start the server
 export const startServer = async (): Promise<void> => {
-  
-// Load environment variables
+  // Load environment variables
   dotenv.config();
 
   // Create the Express app
@@ -23,6 +22,7 @@ export const startServer = async (): Promise<void> => {
   try {
     // Attempt to load routes
     await loadRoutes(app);
+    console.log("Routes has been registered successfully.");
   } catch (error: any) {
     console.error(error.message);
     return;
