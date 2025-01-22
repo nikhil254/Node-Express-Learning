@@ -13,9 +13,8 @@ export class AppError extends Error {
 
   constructor(
     type: TErrorTypes = ErrorTypes.AUTHENTICATION_ERROR,
-    message?: string,
-    details?: any,
-    data?: any // Adding data for success scenario
+    message: string,
+    data: any
   ) {
     const errorType = ErrorDefinitions[type] || ErrorDefinitions[ErrorTypes.GENERIC_ERROR];
     const defaultMessage = errorType.message;
@@ -25,7 +24,6 @@ export class AppError extends Error {
     this.statusCode = errorType.statusCode;
     this.isOperational = errorType.isOperational;
     this.type = type;
-    this.error = details || null;
     this.data = data || null; // Assign data
     this.timestamp = new Date();
     this.message = message || defaultMessage;
@@ -34,15 +32,5 @@ export class AppError extends Error {
     if (Error.captureStackTrace) {
       Error.captureStackTrace(this, this.constructor);
     }
-  }
-
-  // Convert the AppError to a consistent response structure
-  toJSON() {
-    return new ResponseWrapper({
-      data: this.data, 
-      error: this.error,
-      message: this.message,
-      statusCode: this.statusCode,
-    }).toJSON();
   }
 }

@@ -1,6 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { AppError } from "../common/errorHandler/appError";
+import { ResponseWrapper } from "../common/response-wrapper/response-wrapper"; // Import ResponseWrapper
 import StatusCodes from "http-status";
+import { asyncLocalStorage } from '../utils/asyncStorage'; // Import asyncLocalStorage
 
 export const errorHandler = (
   error: any,
@@ -8,35 +9,18 @@ export const errorHandler = (
   response: Response,
   next: NextFunction
 ) => {
-  // Build the base error response structure
-  const errorResponse: Record<string, any> = {
-    error: {
-      message: "An unexpected error occurred. Please try again later.",
-      statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-      status: StatusCodes[StatusCodes.INTERNAL_SERVER_ERROR],
-    },
+  // Build the error response
+  const errorResponse = {
+    data: null,
+    error: error instanceof Error ? { message: error.message, stack: error.stack } : error,
+    message: error.message || "Internal Server Error",
+    statusCode: error.statusCode || StatusCodes.INTERNAL_SERVER_ERROR,
+    request, // Pass the request object to ResponseWrapper
   };
 
-  if (error instanceof AppError) {
-    // Operational error
-    errorResponse.error = {
-      message: error.message,
-      type: error.type,
-      statusCode: error.statusCode,
-      status: StatusCodes[error.statusCode as keyof typeof StatusCodes] || "Unknown",
-      details: error.error,
-    };
+  // Log the error for debugging purposes
+  console.error(`[${new Date().toISOString()}] ${request.method} ${request.url} - ${error.message}`);
 
-    // Log the operational error
-    console.error(`[${new Date().toISOString()}] ${request.method} ${request.url} - ${error.message}`);
-    response.status(error.statusCode).json(errorResponse);
-  } else {
-    // Unexpected error
-    if (process.env.NODE_ENV === "development" && error.stack) {
-      errorResponse.error.stack = error.stack; // Include stack trace in development
-    }
-
-    console.error(`[${new Date().toISOString()}] ${request.method} ${request.url} - ${error.message || "Unknown error"}`);
-    response.status(StatusCodes.INTERNAL_SERVER_ERROR).json(errorResponse);
-  }
+  // Send the error response in the standardized format
+  response.status(errorResponse.statusCode).json(new ResponseWrapper(errorResponse).toJSON());
 };

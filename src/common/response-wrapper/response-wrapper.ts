@@ -1,42 +1,51 @@
 import { asyncLocalStorage } from '../../utils/asyncStorage';
-import StatusCodes from 'http-status';
-import { ResponseData } from './request-response.types';
 
 export class ResponseWrapper {
-  data: any;
-  error?: any;
-  message: string;
   statusCode: number;
-  reqMethod: string;
+  message: string;
+  data: any | null;
+  error: any | null;
+  timestamp: string;
+  requestId: string;
   pathUrl: string;
-  timeStamp: string;
-  yy: string;
+  reqMethod: string;
 
-  constructor({ data, error, message, statusCode }: ResponseData) {
+  constructor({
+    data,
+    error,
+    message,
+    statusCode,
+    request, // Add the request object
+  }: {
+    data: any | null;
+    error: any | null;
+    message: string;
+    statusCode: number;
+    request: any; // Request object to extract method, url, and headers
+  }) {
+    // Get the request metadata from the request object or asyncLocalStorage
     const store = asyncLocalStorage.getStore() || new Map<string, any>();
-
     this.data = data ?? null;
     this.error = error ?? null;
     this.message = message;
-    this.statusCode =
-      statusCode || StatusCodes.OK;
-    this.reqMethod = store.get('reqMethod') || 'UNKNOWN';
-    this.pathUrl = store.get('pathUrl') || 'UNKNOWN';
-    this.timeStamp = store.get('timeStamp') || new Date().toISOString();
-    this.yy = store.get('requestId') || 'UNKNOWN';
+    this.statusCode = statusCode;
+    this.timestamp = new Date().toISOString();
+    this.requestId = store.get('requestId') || request.headers['x-request-id'] || 'UNKNOWN';
+    this.pathUrl = request.originalUrl || 'UNKNOWN';
+    this.reqMethod = request.method || 'UNKNOWN';
   }
 
   // Serialize the response object for JSON output
   toJSON() {
     return {
+      statusCode: this.statusCode,
+      message: this.message,
       data: this.data,
       error: this.error,
-      message: this.message,
-      statusCode: this.statusCode,
-      reqMethod: this.reqMethod,
+      timestamp: this.timestamp,
+      requestId: this.requestId,
       pathUrl: this.pathUrl,
-      timeStamp: this.timeStamp,
-      yy: this.yy
+      reqMethod: this.reqMethod,
     };
   }
 }

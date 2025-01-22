@@ -3,4 +3,7 @@ export interface ResponseData {
     error?: any;
     message: string;
     statusCode: number;
+    reqMethod: string;
+    pathUrl: string;
+    timeStamp: string;
   }
