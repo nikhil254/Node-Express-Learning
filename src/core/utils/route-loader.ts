@@ -7,8 +7,8 @@ import { EErrorTypes } from '../enum/errorTypes.enum';
 const registerRoute = async (app: Express, routePath: string, apiPath: string) => {
   try {
     const routeModule = await import(routePath);
-    app.use(apiPath, routeModule.default);
-    const routeName = routePath.split('\\services')[1]?.split('\\')[1];        
+    app.use(apiPath, routeModule.default);    
+    const routeName = routePath.split('/services')[1]?.split('/')[1];        
     console.log(`Routes for ${apiPath}${routeName} registered.`);
   } catch (error) {
     // Instead of a generic error, throw an AppError
