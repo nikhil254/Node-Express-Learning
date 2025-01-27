@@ -1,28 +1,28 @@
 {
-  "name": "node-express-learning",
+  "name": "eureka-construction-api",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "generate-module": "ts-node src/cli/generate-module-file.ts generate",
+    "generate-module": "ts-node src/scripts/generate-module-file.ts generate",
     "dev": "nodemon --exec ts-node index.ts"
   },
-  "keywords": [],
-  "author": "",
+  "author": "Nikhil Sachan",
   "license": "ISC",
   "dependencies": {
+    "cls-hooked": "^4.2.2",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^4.21.2",
     "helmet": "^8.0.0",
-    "http-status": "^2.1.0",
+    "http-status-codes": "^2.3.0",
     "pg": "^8.13.1",
     "sequelize": "^6.37.5",
-    "uuid": "^11.0.5",
-    "winston": "^3.17.0"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
+    "@types/cls-hooked": "^4.3.9",
     "@types/commander": "^2.12.5",
     "@types/cors": "^2.8.17",
     "@types/dotenv": "^8.2.3",

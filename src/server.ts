@@ -1,15 +1,14 @@
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
-import dotenv from "dotenv";
-import { loadRoutes } from "./utils/route-loader";
-import { errorHandler } from "./middlewares/error-handler.middleware";
-import { requestContextMiddleware } from "./middlewares/request-context.middleware";
+import { loadRoutes } from "./core/utils/route-loader";
+import { errorHandler } from "./core/middleware/errorHandler";
+import { config } from "./config/config";
+import { resInterceptor } from "./core/middleware/responseHandler";
+import { connectToDatabase } from "./core/database/connectDatabase";
 
 // Function to start the server
-export const startServer = async (): Promise<void> => {
-  // Load environment variables
-  dotenv.config();
+export const startServer = async (): Promise<void> => {  
 
   // Create the Express app
   const app = express();
@@ -19,7 +18,7 @@ export const startServer = async (): Promise<void> => {
   app.use(express.urlencoded({ extended: true })); // Parse URL-encoded requests
   app.use(helmet()); // Add security headers to the response
   app.use(cors()); // Enable Cross-Origin Resource Sharing
-  app.use(requestContextMiddleware);
+  app.use(resInterceptor);
 
   // Use the loadVersionedRoutes function to register versioned routes
   try {
@@ -34,8 +33,10 @@ export const startServer = async (): Promise<void> => {
   // Global error handler
   app.use(errorHandler);
 
+  await connectToDatabase(); 
+
   // Start the server
-  const SERVER_PORT = process.env.SERVER_PORT || 4000;
+  const SERVER_PORT = config.app.port;
   app.listen(SERVER_PORT, () => {
     console.log(`🚀 Server is running on http://localhost:${SERVER_PORT}`);
   });

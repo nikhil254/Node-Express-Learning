@@ -1,0 +1,6 @@
+export enum ESuccessTypes {
+    DATA_FETCH_SUCCESS = "DATA_FETCH_SUCCESS",
+    Data_CREATED = "Data_CREATED",
+    DATA_UPDATED = "DATA_UPDATED",
+    DATA_DELETED = "DATA_DELETED",
+}
